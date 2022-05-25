@@ -1,9 +1,7 @@
+### Julia Flanagan
 ### BigQuery table 'cycle_stats'
 
-![Screenshot](screenshot.png)
-
-
-
+![screenshot](screenshot.png)
 
 ### Steps I followed
 1. I copied the public data into cycle_stations and cycle_hire
