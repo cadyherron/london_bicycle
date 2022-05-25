@@ -3,6 +3,8 @@
 
 ![screenshot](screenshot.png)
 
+As of 4:45pm on 5/25/22, I haven't been able to fill in the last 3 columns (median, most popular destination, and most popular origin). I hope to finish soon, but I wanted to submit this before EOD.
+
 ### Steps I followed
 1. I copied the public data into cycle_stations and cycle_hire
 2. I loaded the JSON data into staging tables: cycle_stations_update and cycle_hire_update
