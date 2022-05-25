@@ -63,6 +63,20 @@ The most common station that people rode from to that station
 Any other useful stats you can think of (including from other datasets if you’re feeling adventurous) 
 
 
+station_id
+day
+rides_from_station = int
+rides_to_station = int
+total_ride_time = int
+average_ride_time = float64
+median_ride_time = float64
+most_popular_destination = int
+most_common_origin = int
+
+
+
+
+
 WIP
 select start.station_id, start.day, start.rides_from_station, endd.rides_to_station, start.total_ride_time, average_ride_time
 from (
@@ -87,3 +101,61 @@ join (
   group by station_id, day, hires.duration, hires.rental_id
 )
 order by start.day
+
+
+[
+  {
+    "description": "",
+    "mode": "REQUIRED",
+    "name": "station_id",
+    "type": "INTEGER"
+  },
+  {
+    "description": "",
+    "mode": "REQUIRED",
+    "name": "day",
+    "type": "TIMESTAMP"
+  },
+    {
+    "description": "",
+    "mode": "NULLABLE",
+    "name": "rides_from_station",
+    "type": "INTEGER"
+  },
+    {
+    "description": "",
+    "mode": "NULLABLE",
+    "name": "rides_to_station",
+    "type": "INTEGER"
+  },
+    {
+    "description": "",
+    "mode": "NULLABLE",
+    "name": "total_ride_time",
+    "type": "INTEGER"
+  },
+    {
+    "description": "",
+    "mode": "NULLABLE",
+    "name": "average_ride_time",
+    "type": "FLOAT"
+  },
+    {
+    "description": "",
+    "mode": "NULLABLE",
+    "name": "median_ride_time",
+    "type": "FLOAT"
+  },
+    {
+    "description": "",
+    "mode": "NULLABLE",
+    "name": "most_popular_destination",
+    "type": "INTEGER"
+  },
+    {
+    "description": "",
+    "mode": "NULLABLE",
+    "name": "most_common_origin",
+    "type": "INTEGER"
+  }
+]

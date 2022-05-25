@@ -1,3 +1,10 @@
+### BigQuery table 'cycle_stats'
+
+![Screenshot](screenshot.png)
+
+
+
+
 ### Steps I followed
 1. I copied the public data into cycle_stations and cycle_hire
 2. I loaded the JSON data into staging tables: cycle_stations_update and cycle_hire_update
@@ -21,29 +28,21 @@ CREATE TABLE `mailchimp-350820.london_bicycle.cycle_hire_merged` AS (
 4. For the stats table, I started with one station to see if I could get all the data. I decided not to correctly handle rides that started on one day and ended on another day, in the interest of time.
 
 ```sql
-select start.station_id, start.day, start.rides_from_station, endd.rides_to_station, start.total_ride_time, average_ride_time
+insert into `mailchimp-350820.london_bicycle.cycle_stats`
+select start.station_id, timestamp(start.day), start.rides_from_station, endd.rides_to_station, start.total_ride_time, average_ride_time, null, null, null
 from (
   select stations.id as station_id, date(start.start_date) as day, count(start.rental_id) as rides_from_station, sum(start.duration) as total_ride_time, avg(start.duration) as average_ride_time
   from `mailchimp-350820.london_bicycle.cycle_stations_merged` stations
   join `mailchimp-350820.london_bicycle.cycle_hire_merged` start on start.start_station_id = stations.id
-  where start.start_station_id = 395
   group by station_id, day
 ) start
 join (
   select stations.id as station_id, date(endd.start_date) as day, count(endd.rental_id) as rides_to_station
   from `mailchimp-350820.london_bicycle.cycle_stations_merged` stations
   join `mailchimp-350820.london_bicycle.cycle_hire_merged` endd on endd.end_station_id = stations.id
-  where endd.end_station_id = 395
   group by station_id, day
-) endd on start.day = endd.day
-join (
-  select stations.id as station_id, date(hires.start_date) as day, percentile_cont(hires.duration, 0.5) over (partition by hires.rental_id) as median_ride_time
-  from `mailchimp-350820.london_bicycle.cycle_stations_merged` stations
-  join `mailchimp-350820.london_bicycle.cycle_hire_merged` hires on hires.start_station_id = stations.id
-  where hires.start_station_id = 395
-  group by station_id, day, hires.duration, hires.rental_id
-)
-order by start.day
+) endd on start.day = endd.day and start.station_id = endd.station_id
+order by start.day;
 ```
 
 
