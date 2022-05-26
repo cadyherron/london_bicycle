@@ -25,6 +25,11 @@ cycle_hire has 24,369,201 rows
 cycle_hire_update has 1,217,716 rows = 5% of rows
 
 
+Gotcha's that I encountered
+- I needed to select EU for region, which wasn't the default
+- cycle_hire.id is NULLABLE and not required, which isn't great for a primary key
+- cycle_hire.locked is a string of "true" or "false" instead of a boolean
+
 
 ORIGINAL
 {"id":"260","installed":"true","latitude":"51.5136846","locked":"false","longitude":"-0.135580879","name":"Broadwick Street, Soho","bikes_count":"18","docks_count":"18","nbEmptyDocks":"0","temporary":"false","terminal_name":"3489","install_date":"2010-07-21","removal_date": null}

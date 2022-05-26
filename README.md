@@ -53,7 +53,33 @@ order by start.day;
 3. I enjoy writing SQL queries
 
 
-### Gotcha's that I encountered
-- I needed to select EU for region, which wasn't the default
-- cycle_hire.id is NULLABLE and not required, which isn't great for a primary key
-- cycle_hire.locked is a string of "true" or "false" instead of a boolean
+### Things I would do next:
+1. Finish the missing calculations
+2. Analyze the query for efficiency and speed
+3. Add something fun from a public dataset. My first thought was to add temperature based on the station's latitude/longitude to see if rides increased on warmer days.
+
+
+### WIP
+
+```sql
+-- median ride time
+select stations.id as station_id, date(hires.start_date) as day, percentile_cont(hires.duration, 0.5) over (partition by hires.start_date) as median_ride_time
+from `mailchimp-350820.london_bicycle.cycle_stations_merged` stations
+join `mailchimp-350820.london_bicycle.cycle_hire_merged` hires on hires.start_station_id = stations.id
+where hires.start_station_id = 395
+group by station_id, day, hires.duration, hires.rental_id, hires.start_date
+order by day
+limit 1
+```
+
+```sql
+-- most popular destination
+select * from (
+    select stations.id as station_id, count(end_station_id) as count_end, end_station_id, date(start.start_date) as day,
+        row_number() over(partition by end_station_id order by count(end_station_id) desc) as top,
+      from `mailchimp-350820.london_bicycle.cycle_stations_merged` stations
+      join `mailchimp-350820.london_bicycle.cycle_hire_merged` start on start.start_station_id = stations.id
+      group by station_id, end_station_id, day
+) j where j.top = 1
+order by j.station_id
+```
